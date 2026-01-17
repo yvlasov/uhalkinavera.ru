@@ -59,7 +59,7 @@ services:
     entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
 ```
 
-### nginx.conf
+### nginx-ssl.conf
 ```nginx
 events {
     worker_connections 1024;
@@ -142,23 +142,5 @@ http {
 ```
 
 ### init-letsencrypt.sh
-```bash
-#!/bin/bash
+Need to be fixed to support initial deploy because on first start nginx fails without cert files and same time without nginx certbot cannot issue certs. For init run nginx-init.conf file should be used.
 
-domains=(uhalkinavera.ru www.uhalkinavera.ru static.uhalkinavera.ru video.uhalkinavera.ru)
-email="your-email@example.com"  # CHANGE THIS
-
-mkdir -p certbot/conf certbot/www
-
-docker-compose run --rm certbot certonly --webroot \
-    -w /var/www/certbot \
-    --email $email \
-    --agree-tos \
-    --no-eff-email \
-    -d ${domains[0]} \
-    -d ${domains[1]} \
-    -d ${domains[2]} \
-    -d ${domains[3]}
-
-docker-compose up -d
-```

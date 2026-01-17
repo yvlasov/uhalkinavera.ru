@@ -6,6 +6,15 @@ email="your-email@example.com"  # CHANGE THIS
 echo "### Creating certbot directories..."
 mkdir -p certbot/conf certbot/www
 
+echo "### Using nginx-init.conf for initial setup (HTTP only)..."
+cp nginx-init.conf nginx.conf
+
+echo "### Starting nginx with HTTP-only config..."
+docker-compose up -d nginx
+
+echo "### Waiting for nginx to start..."
+sleep 5
+
 echo "### Requesting Let's Encrypt certificate for ${domains[*]}..."
 docker-compose run --rm certbot certonly --webroot \
     -w /var/www/certbot \
@@ -17,7 +26,13 @@ docker-compose run --rm certbot certonly --webroot \
     -d ${domains[2]} \
     -d ${domains[3]}
 
-echo "### Starting nginx and certbot services..."
-docker-compose up -d
+echo "### Switching to SSL configuration..."
+cp nginx-ssl.conf nginx.conf
+
+echo "### Restarting nginx with SSL config..."
+docker-compose restart nginx
+
+echo "### Starting certbot renewal service..."
+docker-compose up -d certbot
 
 echo "### Done! Your site should now be accessible at https://uhalkinavera.ru"
