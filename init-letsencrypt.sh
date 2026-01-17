@@ -24,15 +24,15 @@ echo "### Waiting for nginx to start..."
 sleep 5
 
 echo "### Requesting Let's Encrypt certificate for ${domains[*]}..."
-docker-compose run --rm certbot certonly --webroot \
-    -w /var/www/certbot \
+docker-compose run --rm --entrypoint "\
+  certbot certonly --webroot -w /var/www/certbot \
     --email $email \
     --agree-tos \
     --no-eff-email \
     -d ${domains[0]} \
     -d ${domains[1]} \
     -d ${domains[2]} \
-    -d ${domains[3]}
+    -d ${domains[3]}" certbot
 
 echo "### Switching to SSL configuration..."
 cp nginx-ssl.conf nginx.conf
