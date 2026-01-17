@@ -3,8 +3,16 @@
 domains=(uhalkinavera.ru www.uhalkinavera.ru static.uhalkinavera.ru video.uhalkinavera.ru)
 email="your-email@example.com"  # CHANGE THIS
 
+echo "### Stopping any existing containers..."
+docker-compose down
+
 echo "### Creating certbot directories..."
 mkdir -p certbot/conf certbot/www
+
+echo "### Removing nginx.conf if it exists as directory..."
+if [ -d "nginx.conf" ]; then
+    rm -rf nginx.conf
+fi
 
 echo "### Using nginx-init.conf for initial setup (HTTP only)..."
 cp nginx-init.conf nginx.conf
