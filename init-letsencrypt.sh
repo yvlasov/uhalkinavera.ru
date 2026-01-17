@@ -1,7 +1,7 @@
 #!/bin/bash
 
 domains=(uhalkinavera.ru www.uhalkinavera.ru static.uhalkinavera.ru video.uhalkinavera.ru)
-email="your-email@example.com"  # CHANGE THIS
+email="admin@pytn.ru"  # CHANGE THIS
 
 echo "### Stopping any existing containers..."
 docker-compose down
